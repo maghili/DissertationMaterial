@@ -1,16 +1,7 @@
 import numpy as np
+from pool import future
 def sprinkler(N,d):
 	''' Sprinkling the points in the manifold '''
-	##################
-	#function
-	def future(xf,xp,d):
-		''' Checking if point xf is in the future of xp '''
-		R=np.sqrt(sum([(f-p)**2 for f, p in zip(xf[1:], xp[:1])]))
-		if xp[0]<xf[0] and R< xf[0]-xp[0]:
-			return 1
-		else:
-			return 0
-	###################
 	boxdim=[1]*d
 	xmin=[0]*d
 	xmax=[1]+[0]*(d-1)

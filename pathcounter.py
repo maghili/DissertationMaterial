@@ -35,9 +35,9 @@ def job(N,nsp,D):
 		for n in N:
 			alpha=[];MP=[];beta=[];M=[];ABP=[];BG=[];AcAVG=[];EsAVG=[];MP2=[]; nct = 0
 			for sp in range(nsp):
-				print '%dD %d points, sprinkling %d'%(d,n,sp+1)
+				print('\r%dD %d points, sprinkling %d'%(d,n,sp+1), end = '')
 				s=sprinkler.sprinkler(n,d)
-				[link,Relations,PastRelations]=nnfinder.nnfinder(s,n,d)
+				link, Relations, PastRelations = nnfinder.nnfinder(s,n,d)
 				[weights,MidPoint1,MidPoint2,MyrheimMeyer,b,lmax,avglen,a,tot]=Calculations.pathfinder(link,Relations,PastRelations,n,d)
 				beta.append(b)
 				alpha.append(a)
@@ -57,46 +57,46 @@ def job(N,nsp,D):
 				#####################
 				#Myrheim-Meyer dimension calculation
 				guess_dim=1.5;
-				func =lambda dims:MyrheimMeyer-m.gamma(dims+1)*m.gamma(dims/2.)/(4*m.gamma(3*dims/2.0))
+				func =lambda dims: MyrheimMeyer-m.gamma(dims+1)*m.gamma(dims/2.)/(4*m.gamma(3*dims/2.0))
 				dim=fsolve(func,guess_dim)
 				M.append(dim)
 			############################
-			MidPd[d-2][c]=np.average(MP);MidPdStd[d-2][c]=np.std(MP)#Midpoint estimated avg dimension and std
-			MidPd2[d-2][c] = np.average(MP2);MidPdStd2[d-2][c] = np.std(MP2)
-			vals[d-2][c]=np.average(alpha);stdvals[d-2][c]=np.std(alpha)
-			BGbeta[d-2][c]=np.average(beta);BGbetaStd[d-2][c]=np.std(beta)
-			MMd[d-2][c]=np.average(M);MMdStd[d-2][c]=np.std(M)
-			ABPd[d-2][c]=np.average(ABP);ABPdStd[d-2][c]=np.std(ABP)
-			BGd[d-2][c]=np.average(BG);BGdStd[d-2][c]=np.std(BG)
+			MidPd[d-2][c]=np.average(MP); MidPdStd[d-2][c]=np.std(MP)#Midpoint estimated avg dimension and std
+			MidPd2[d-2][c] = np.average(MP2); MidPdStd2[d-2][c] = np.std(MP2)
+			vals[d-2][c]=np.average(alpha); stdvals[d-2][c]=np.std(alpha)
+			BGbeta[d-2][c]=np.average(beta); BGbetaStd[d-2][c]=np.std(beta)
+			MMd[d-2][c]=np.average(M); MMdStd[d-2][c]=np.std(M)
+			ABPd[d-2][c]=np.average(ABP); ABPdStd[d-2][c]=np.std(ABP)
+			BGd[d-2][c]=np.average(BG); BGdStd[d-2][c]=np.std(BG)
 			nct += 1
 			#######################
-			c=c+1
+			c += 1
 	#################################
 	#saving
-	np.save('Alpha',vals);np.save('StdAlpha',stdvals)
-	np.save('MidPoint',MidPd);np.save('MidPointStd',MidPdStd)
+	np.save('Alpha',vals); np.save('StdAlpha',stdvals)
+	np.save('MidPoint',MidPd); np.save('MidPointStd',MidPdStd)
 	np.save('MidPoint2', MidPd2); np.save('MidPointStd2', MidPdStd2)
-	np.save('BGbeta',BGbeta);np.save('BGbetaStd',BGbetaStd)
-	np.save('MMd',MMd);np.save('MMdStd',MMdStd)
-	np.save('ABPd',ABPd);np.save('ABPdStd',ABPdStd)
-	np.save('BGd',BGd);np.save('BGdStd',BGdStd)
+	np.save('BGbeta',BGbeta); np.save('BGbetaStd',BGbetaStd)
+	np.save('MMd',MMd); np.save('MMdStd',MMdStd)
+	np.save('ABPd',ABPd); np.save('ABPdStd',ABPdStd)
+	np.save('BGd',BGd); np.save('BGdStd',BGdStd)
 
 def pl(N,D):
 	''' Plotting the results'''
-	Alpha=np.load('Alpha.npy').tolist();StdAlpha=np.load('StdAlpha.npy').tolist()
-	MidPoint=np.load('Midpoint.npy');MidPointStd=np.load('MidPointStd.npy')
-	MidPoint2=np.load('Midpoint2.npy');MidPointStd2=np.load('MidPointStd2.npy')
-	BGbeta=np.load('BGbeta.npy');BGbetaStd=np.load('BGbetaStd.npy')
-	MMd=np.load('MMd.npy');MMdStd=np.load('MMdStd.npy')
-	ABPd=np.load('ABPd.npy');ABPdStd=np.load('ABPdStd.npy')
-	BGd=np.load('BGd.npy');BGdStd=np.load('BGdStd.npy')
-	tAlpha=np.load('talpha.npy');C=np.load('coef.npy')
+	Alpha=np.load('Alpha.npy').tolist(); StdAlpha=np.load('StdAlpha.npy').tolist()
+	MidPoint=np.load('Midpoint.npy'); MidPointStd=np.load('MidPointStd.npy')
+	MidPoint2=np.load('Midpoint2.npy'); MidPointStd2=np.load('MidPointStd2.npy')
+	BGbeta=np.load('BGbeta.npy'); BGbetaStd=np.load('BGbetaStd.npy')
+	MMd=np.load('MMd.npy'); MMdStd=np.load('MMdStd.npy')
+	ABPd=np.load('ABPd.npy'); ABPdStd=np.load('ABPdStd.npy')
+	BGd=np.load('BGd.npy'); BGdStd=np.load('BGdStd.npy')
+	tAlpha=np.load('talpha.npy'); C=np.load('coef.npy')
 	alpha50=np.load('Alpha50.npy').tolist(); alphastd50=np.load('StdAlpha50.npy').tolist()
 	##################################
 	cs=['tab:blue','tab:red','tab:green','tab:cyan','tab:pink','b','r','g']
 	mk=['o','v','s','d','<','>','8','h']
 	def expol(x,a,b,c):
-	    return [a*1./j**c+b for j in x]
+	    return [a/j**c+b for j in x]
 	fig, ax = subplots()
 	newN=[50]+N[10:];
 	for d in range(2,D+1):
@@ -216,5 +216,5 @@ def pl(N,D):
 		savefig('%dsp_1500_errors_%dD.pdf'%(nsp,d))
 ##################################
 #Running
-#job(N,nsp,D)
+job(N,nsp,D)
 pl(N,D)

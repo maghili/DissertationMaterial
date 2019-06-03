@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import sparse
 import itertools
 def pathfinder(link,Relations,PastRelations,N,d):
 	''' Finding the path length distribution in a
@@ -8,13 +9,10 @@ def pathfinder(link,Relations,PastRelations,N,d):
 	######################
 	#MidPoint
 	if N>=100:
-		minvols = [0]*(N+2);#futures=[0]*(N+2);pasts=[0]*(N+2)
-		maxvols = [0]*(N+2)
-		for i in range(N+2):
-			minvols[i] = min([sum(Relations[i]),sum(PastRelations[i])])
-			maxvols[i] = max([sum(Relations[i]), sum(PastRelations[i])])
+		minvols = [ min(sum(Relations[i]),sum(PastRelations[i])) for i in range(N+2) ]
+		maxvols = [ max(sum(Relations[i]), sum(PastRelations[i])) for i in range(N+2) ]
 		HalfminVol = max(minvols)
-		HalfmaxVol = maxvols[minvols.index(HalfminVol)]
+		HalfmaxVol = maxvols[np.argmax(minvols)]
 		MidPoint1 = np.log(N/(HalfminVol-1.))/np.log(2)
 		MidPoint2 = np.log(N/(HalfmaxVol-1.))/np.log(2)
 	else:
@@ -28,24 +26,24 @@ def pathfinder(link,Relations,PastRelations,N,d):
 	MyrheimMeyer=c2*1.0/(N*N-1)
 	######################
 	#Brightwell-Gregory and ABP
-	mlinks=np.matrix(link)
-	zero=[[0]*len(link) for j in range(len(link))]
-	A=np.identity(len(mlinks))
+	mlinks=sparse.csr_matrix( np.matrix(link) )
+	zero=sparse.csr_matrix( np.zeros((N+2, N+2)) )
+	A=sparse.csr_matrix( np.identity(N+2) )
 	pathlength=[]
 	m=1
 	tot=[]
 	weights=[0]*(N+2)
 	mnk=[]
-	while m<=len(link):
-		if (A*mlinks).tolist()!=zero:
+	while m <= N+2:
+		if ((A*mlinks)!=zero).nnz:
 			A=A*mlinks
 			pathlength.append(m)
 			tot.append(A[0,-1])
 			mnk.append(m*A[0,-1])
 			weights=[weights[i]+A[i,-1] for i in range(N+2)]
-			m=m+1
+			m = m+1
 		else:
-			m=len(link)+1
+			m = N+3
 	totpath=sum(tot)
 	Longest=pathlength[-1]
 	beta=Longest/(N)**(1.0/d)

@@ -19,7 +19,7 @@ def alt_f(n):
     for k in range(1,n+1):
         for i in range(n+1):
             func[k][i]=sum([mpm.gamma(j+1)*mpm.gamma(1-j+i)*func[k-1][j]/mpm.gamma(i+1) for j in range(i+1)])
-    print 'table created'
+    print('table created')
     return func
 
 
@@ -35,9 +35,10 @@ def nk(n,A):
     n_k=[]
     for length in range(1,n+1):
         #x=[n**(length-1)*(-1)**i*mpm.gamma(n+1)*A[length-1][i]*mpm.gamma(i+1)/(mpm.gamma(i+length)**2*mpm.gamma(1-i+n)) for i in range(n+1)]
-        x=[mpm.gamma(n+1.)*(-1)**i*A[length-1][i]*mpm.gamma(i+1)/(mpm.gamma(i+length)**2*mpm.gamma(2-i-length+n)) for i in range(n-length+2)]
+        x=[mpm.gamma(n+1.)*(-1)**i*A[length-1][i]*mpm.gamma(i+1)/(mpm.gamma(i+length)**2*mpm.gamma(2-i-length+n)) 
+        for i in range(n-length+2)]
         n_k.append(sum(x))
-    knk=sum([k*n_k[k-1] for k in range(1,n+1)])
+    knk=sum(k*n_k[k-1] for k in range(1,n+1))
     snk=sum(n_k)
     kavg=knk*1./snk
     a=kavg/n**(1.0/2)
@@ -57,11 +58,11 @@ for num in N:
 #expol = lambda x,a,b:a/x+b
 #N=N+[100];alpha=alpha+[1.225]
 def expol(x,a,b,c):
-    return [a*1./j**c+b for j in x]
+    return [a/j**c+b for j in x]
 
 best_val, cov=curve_fit(expol, N, alpha, [1, 1, 1])
 
-print len(alpha)
+print(len(alpha))
 #print best_val
 
 plt.plot(N,alpha)

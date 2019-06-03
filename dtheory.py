@@ -25,7 +25,7 @@ def alt_f(n,d):
     for k in range(1,n+1):
         for i in range(n-k+1):
             func[k][i]=sum([mpm.gamma((i-j+1.)*d/2.0)*mpm.gamma(1.0+(i-j)*d/2.0)/mpm.gamma(1-j+i)*func[k-1][j] for j in range(i+1)])
-    print 'table created'
+    print('table created')
     return func
 
 
@@ -36,9 +36,9 @@ def nk(n,A,d):
         x=[(mpm.gamma(d+1)/(2.*mpm.gamma(d/2.)))**(length-1)*(-1)**i*mpm.gamma(n+1)*A[d-2][length-1][i]/
         (mpm.gamma((i+length)*d/2.0)*mpm.gamma(1+(length-1.0+i)*d/2.0)*mpm.gamma(2-i+n-length)) for i in range(n-length+2)]
         n_k.append(sum(x))
-    knk=sum([k*n_k[k-1] for k in range(1,n+1)])
+    knk=sum(k*n_k[k-1] for k in range(1,n+1))
     snk=sum(n_k)
-    kavg=knk*1./snk
+    kavg=knk/snk
     a=kavg/n**(1.0/d)
     return n_k, kavg, a
 
@@ -53,7 +53,7 @@ for spr in range(nsp):
     link, R, PR = nf.nnfinder(s,Nm,2)
     weights,MidPoint, MidPoint2,MyrheimMeyer,beta,Longest,avglen,alpha,tot = cal.pathfinder(link, R, PR, Nm, 2)
     dist.append(tot)
-print sum(tot)
+print(sum(tot))
 
 lens = [len(a) for a in dist]
 for a in dist:
@@ -76,9 +76,9 @@ for d in range(2,D+1):
         alpha.append(float(a))
     Alphat.append(alpha)
 
-print len(y)
+print(len(y))
 def expol(x,a,b,c):
-    return [a*1./j**c+b for j in x]
+    return [a/j**c+b for j in x]
 
 markers = ['o', 's', 'd', '^', '*']
 style.use('bmh')
